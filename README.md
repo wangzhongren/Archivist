@@ -65,19 +65,24 @@ python server.py
 
 ## 🧠 How It Works
 
-```mermaid
-graph LR
-    A[User Query] --> B(Web UI)
-    B --> C{Flask Server}
-    C --> D[Context Agent<br>(Retrieves Memories)]
-    D --> E[Main Agent + LLM]
-    E -->|Tool Call| F[File System]
-    F -->|Results| E
-    E -->|Final Answer| C
-    C -->|Store Q&A| G[Memory Agent]
-    G --> H[(memory.json)]
+### System Architecture
+```
+User Query
+    │
+    ▼
+Web UI (Browser)
+    │
+    ▼
+Flask Server
+    ├── Context Agent → Retrieves relevant memories from memory.json
+    ├── Main Agent → Communicates with LLM + executes file operations
+    └── Memory Agent → Saves new Q&A pairs to memory.json
+                │
+                ▼
+            File System (Your project files)
 ```
 
+### Workflow
 1. User asks a question in natural language
 2. System retrieves relevant memories as context
 3. LLM decides whether to call tools (e.g., read a file)
